@@ -1,3 +1,5 @@
+require 'byebug'
+
 class ComputerPlayer
   attr_reader :secret_word
   attr_accessor :guessed
@@ -22,20 +24,39 @@ class ComputerPlayer
   end
 
   def receive_secret_length(word_length)
-
+    @word_length = word_length
+    @possible_words = @dictionary.select { |word| word.length == @word_length }
   end
 
   def guess
-    loop do
-      guess = ("a".."z").to_a.sample
-      unless @guessed.include?(guess)
-        @guessed << guess
-        return guess
+    high_count = 0
+    @guess = nil
+    ("a".."z").to_a.each do |char|
+      next if @guessed.include?(char)
+      char_count = 0
+      @possible_words.each do |word|
+        char_count += word.count(char)
+      end
+      if char_count > high_count
+        high_count = char_count
+        @guess = char
       end
     end
+
+    @guessed << @guess
+    @guess
   end
 
   def reveal_word
     @secret_word
+  end
+
+  def get_locations(locations)
+    locations.each do |loc|
+      @possible_words = @possible_words.select{ |word| word[loc] == @guess }
+    end
+    @possible_words = @possible_words.select do |word|
+      word.count(@guess) == locations.size
+    end
   end
 end

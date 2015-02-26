@@ -26,7 +26,6 @@ class HumanPlayer
       end
       puts "Invalid input, what are its positions?"
     end
-
   end
 
   def receive_secret_length(word_length)
@@ -53,5 +52,14 @@ class HumanPlayer
   def reveal_word
     puts "Game over, what was the word?"
     gets.chomp
+  end
+
+  def get_locations(locations)
+    if locations.empty?
+      puts "Wrong guess."
+    else
+      locations = locations.map { |loc| loc + 1 }
+      puts "Guess found at locations: #{locations.join(", ")}."
+    end
   end
 end

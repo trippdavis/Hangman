@@ -27,6 +27,7 @@ class Hangman
     locations.each do |loc|
       @board[loc] = guess
     end
+    @guesser.get_locations(locations)
   end
 
   def game_over?
